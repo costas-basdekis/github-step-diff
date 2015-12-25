@@ -1,22 +1,26 @@
 "use strict";
 
-var prUi = {
-    addStepDiffTab: function addStepDiffTab(commitsUrls) {
+class StepDiff {
+    constructor(pullRequest) {
+        this.pullRequest = pullRequest || new PullRequest();
+        this.addStepDiffTab();
+    }
+    addStepDiffTab() {
         var $stepDiffTabNav = this.createStepDiffTabNav();
         var $prTabNav = $(".tabnav-pr");
         $prTabNav
             .before($stepDiffTabNav);
 
         var $prBody = $stepDiffTabNav.nextAll();
-        var $stepDiffTabContent = this.createStepDiffTabContent($prBody, commitsUrls    );
+        var $stepDiffTabContent = this.createStepDiffTabContent($prBody);
 
         $stepDiffTabNav
             .after($stepDiffTabContent);
 
         this.bindNavTabs();
         this.bindStepDiffsCommits();
-    },
-    createStepDiffTabNav: function createStepDiffTabNav() {
+    }
+    createStepDiffTabNav() {
         var pathNamePartsList = document.location.pathname.split('/');
         var pathNameParts = {
             organisation: pathNamePartsList[1],
@@ -48,8 +52,8 @@ var prUi = {
         `);
 
         return $newTabNav;
-    },
-    createStepDiffTabContent: function createStepDiffTabContent ($prBody, commitsUrls) {
+    }
+    createStepDiffTabContent ($prBody) {
         var $prTabContent = $(`
             <div
                     class="tabcontent pr-tab-content is-visible js-tab-content"
@@ -58,7 +62,6 @@ var prUi = {
                 >
             </div>
         `);
-        $prTabContent.append($prBody);
 
         var $stepDiffTabContent = $(`
             <div
@@ -67,14 +70,14 @@ var prUi = {
                     data-tab="step-diff"
                 >
                 <ul>
-                    ${forIn(commitsUrls, url => `
+                    ${forIn(this.pullRequest.commits, commit => `
                         <li>
                             <a
                                     href="#"
                                     class="js-step-diff-commit"
-                                    data-url="${url}"
+                                    data-hash="${commit.hash}"
                                 >
-                                ${url}
+                                ${commit.url}
                             </a>
                         </li>
                     `)}
@@ -82,41 +85,43 @@ var prUi = {
             </div>
         `);
 
+        $prTabContent.append($prBody);
+
         return $()
             .add($prTabContent)
             .add($stepDiffTabContent);
-    },
-    bindNavTabs: function bindNavTabs () {
+    }
+    bindNavTabs () {
         $(".js-tabnav-tab").click(function (event) {
             var $tab = $(event.target);
             var tabGroup = $tab.attr("data-tab-group");
             var tabName = $tab.attr("data-tab");
             this.selectTabNav(tabGroup, tabName)
         }.bind(this));
-    },
-    bindStepDiffsCommits: function bindStepDiffsCommits () {
+    }
+    bindStepDiffsCommits () {
         $(".js-step-diff-commit").click(function (event) {
             var $e = $(event.target);
-            var commitUrl = $e.attr("data-url");
-            var commitInfo = commitParser.getCommitInfo(commitUrl);
+            var commitHash = $e.attr("data-hash");
+            var commit = this.pullRequest.byHash(commitHash);
             $e.after($(`
                 <div>
                     <img
-                            alt="@${commitInfo.authorName}"
+                            alt="@${commit.authorName}"
                             class="avatar"
                             height="24"
-                            src="${commitInfo.authorAvatarUrl}"
+                            src="${commit.authorAvatarUrl}"
                             width="24"
                         >
-                    <a href="commitInfo.url">${commitInfo.hash.substring(0, 7)}</a>
-                    <strong>${commitInfo.title}</strong>
-                    (${commitInfo.filesList.length} files)
+                    <a href="commit.url">${commit.hash.substring(0, 7)}</a>
+                    <strong>${commit.title}</strong>
+                    (${commit.filesList.length} files)
                 </div>
             `));
             $e.remove();
         }.bind(this));
-    },
-    selectTabNav: function selectTabNav (tabGroup, tabName) {
+    }
+    selectTabNav (tabGroup, tabName) {
         var $tabContents = $(`.js-tab-content[data-tab-group="${tabGroup}"]`);
         $tabContents
             .removeClass("is-visible");
@@ -132,5 +137,5 @@ var prUi = {
             .filter(`[data-tab="${tabName}"]`);
         $thisTab
             .addClass("selected");
-    },
-};
+    }
+}

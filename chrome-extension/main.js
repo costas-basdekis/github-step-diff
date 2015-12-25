@@ -3,8 +3,7 @@
 console.log("github-step-diff loaded");
 
 function init() {
-    var commitsUrls = prParser.getCommitUrls();
-    prUi.addStepDiffTab(commitsUrls);
+    new StepDiff();
 
     console.log("github-step-diff is ready");
 }

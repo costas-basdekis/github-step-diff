@@ -15,9 +15,10 @@
       "js": [
         "jquery-2.1.1.min.js",
         "utils.js",
-        "commitParser.js",
-        "prParser.js",
-        "prUi.js",
+        "UrlBased.js",
+        "Commit.js",
+        "PullRequest.js",
+        "StepDiff.js",
         "main.js"
       ]
     }
