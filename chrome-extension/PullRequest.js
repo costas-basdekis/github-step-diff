@@ -1,28 +1,23 @@
 "use strict";
 
 class PullRequest extends UrlBased {
-    getCommitUrls() {
-        if (this._commitUrls) {
-            return;
-        }
-
-        this._commitUrls = this.$(".timeline-commits .commit .commit-id")
-            .toArray()
-            .map(function (e) {
-                return 'https://' + window.location.hostname + $(e).attr("href");
-            });
-
-        delete this._document;
-    }
-    get commitUrls() {this.getCommitUrls(); return this._commitUrls;};
-
     getCommits() {
         if (this._commits) {
             return;
         }
 
-        this._commits = this.commitUrls
-            .map(url => new Commit(url));
+        this._commits = this.$(".timeline-commits .commit")
+            .toArray()
+            .map(function (e) {
+                var $e = $(e);
+                var url = `https://${window.location.hostname}${$e.find(".commit-id").attr("href")}`;
+                return new Commit(url, {
+                    url: url,
+                    title: $e.find(".message").text(),
+                    authorName: $e.find(".author").text(),
+                    authorAvatarUrl: $e.find(".avatar").attr("src"),
+                });
+            });
         this._commitsByHash = listToDict(this._commits, commit => commit.hash);
     }
     get commits() {this.getCommits(); return this._commits;};

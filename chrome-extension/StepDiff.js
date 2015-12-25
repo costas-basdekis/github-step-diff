@@ -72,13 +72,23 @@ class StepDiff {
                 <ul>
                     ${forIn(this.pullRequest.commits, commit => `
                         <li>
-                            <a
-                                    href="#"
-                                    class="js-step-diff-commit"
-                                    data-hash="${commit.hash}"
-                                >
-                                ${commit.url}
-                            </a>
+                            <div>
+                                <img
+                                        alt="@${commit.authorName}"
+                                        class="avatar"
+                                        height="24"
+                                        src="${commit.authorAvatarUrl}"
+                                        width="24"
+                                        data-hash="${commit.hash}"
+                                    >
+                                <a href="commit.url">${commit.hash.substring(0, 7)}</a>
+                                <strong>${commit.title}</strong>
+                                (<a
+                                        href="#"
+                                        data-hash="${commit.hash}"
+                                        class="js-step-diff-commit"
+                                    >get files</a>)
+                            </div>
                         </li>
                     `)}
                 </ul>
@@ -104,20 +114,7 @@ class StepDiff {
             var $e = $(event.target);
             var commitHash = $e.attr("data-hash");
             var commit = this.pullRequest.byHash(commitHash);
-            $e.after($(`
-                <div>
-                    <img
-                            alt="@${commit.authorName}"
-                            class="avatar"
-                            height="24"
-                            src="${commit.authorAvatarUrl}"
-                            width="24"
-                        >
-                    <a href="commit.url">${commit.hash.substring(0, 7)}</a>
-                    <strong>${commit.title}</strong>
-                    (${commit.filesList.length} files)
-                </div>
-            `));
+            $e.after(`<span>${commit.filesList.length} files</span>`);
             $e.remove();
         }.bind(this));
     }

@@ -1,6 +1,14 @@
 "use strict";
 
 class Commit extends UrlBased {
+    constructor(documentOrUrl, info) {
+        super(documentOrUrl);
+        if (info) {
+            this._title = info.title;
+            this._authorName = info.authorName;
+            this._authorAvatarUrl = info.authorAvatarUrl;
+        }
+    }
     splitCommitUrl () {
         if (this._hash) {
             return;
@@ -27,25 +35,28 @@ class Commit extends UrlBased {
             return;
         }
 
-        var filesDiffLines = this.$(".diff-view .file.js-details-container")
-            .toArray()
-            .map(this.getFileDiffLines.bind(this));
-
         this._title = this.$(".commit .commit-title").text();
         this._authorName = this.$(".commit .commit-author-section .user-mention").text();
         this._authorAvatarUrl = this.$(".commit .commit-author-section .avatar").attr("src");
-        this._files = listToDict(filesDiffLines, diffLines => diffLines.filename);
-        this._filesList = filesDiffLines;
+    }
+    get title() {this.getCommitInfo(); return this._title;};
+    get authorName() {this.getCommitInfo(); return this._authorName;};
+    get authorAvatarUrl() {this.getCommitInfo(); return this._authorAvatarUrl;};
+
+    getCommitFiles () {
+        this.getCommitInfo();
+
+        this._filesList = this.$(".diff-view .file.js-details-container")
+            .toArray()
+            .map(this.getFileDiffLines.bind(this));
+        this._files = listToDict(this._filesList, diffLines => diffLines.filename);
 
         delete this.__document;
         delete this._$document;
         delete this._$;
     }
-    get title() {this.getCommitInfo(); return this._title;};
-    get authorName() {this.getCommitInfo(); return this._authorName;};
-    get authorAvatarUrl() {this.getCommitInfo(); return this._authorAvatarUrl;};
-    get files() {this.getCommitInfo(); return this._files;};
-    get filesList() {this.getCommitInfo(); return this._filesList;};
+    get files() {this.getCommitFiles(); return this._files;};
+    get filesList() {this.getCommitFiles(); return this._filesList;};
 
     getFileDiffLines (file) {
         var $file = $(file);
