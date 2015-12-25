@@ -3,7 +3,7 @@
 console.log("github-step-diff loaded");
 
 function init() {
-    new StepDiff();
+    window.stepDiff = new StepDiff();
 
     console.log("github-step-diff is ready");
 }
