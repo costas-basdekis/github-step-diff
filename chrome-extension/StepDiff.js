@@ -82,7 +82,7 @@ class StepDiff {
                                         width="24"
                                         data-hash="${commit.hash}"
                                     >
-                                <a href="commit.url">${commit.hash.substring(0, 7)}</a>
+                                <a href="${commit.url}">${commit.hash.substring(0, 7)}</a>
                                 <strong>${commit.title}</strong>
                                 (<a
                                         href="#"
