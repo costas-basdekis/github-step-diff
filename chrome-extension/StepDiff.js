@@ -46,6 +46,7 @@ class StepDiff {
                             data-tab="step-diff"
                         >
                         Step diff
+                        <span class="counter">${this.pullRequest.commits.length}</span>
                     </a>
                 </div>
             </div>
