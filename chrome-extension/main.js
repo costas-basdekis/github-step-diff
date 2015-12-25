@@ -22,6 +22,7 @@ function addStepDiffTab(commitsUrls) {
 		.after($stepDiffTabContent);
 
 	bindNavTabs();
+	bindStepDiffsCommits();
 }
 
 function createStepDiffTabNav() {
@@ -78,7 +79,13 @@ function createStepDiffTabContent ($prBody, commitsUrls) {
 			<ul>
 				${forIn(commitsUrls, url => `
 					<li>
-						${url}
+						<a
+								href="#"
+								class="js-step-diff-commit"
+								data-url="${url}"
+							>
+							${url}
+						</a>
 					</li>
 				`)}
 			</ul>
@@ -102,6 +109,29 @@ function bindNavTabs () {
 		var tabGroup = $tab.attr("data-tab-group");
 		var tabName = $tab.attr("data-tab");
 		selectTabNav(tabGroup, tabName)
+	});
+}
+
+function bindStepDiffsCommits () {
+	$(".js-step-diff-commit").click(function () {
+		var $e = $(this);
+		var commitUrl = $e.attr("data-url");
+		var commitInfo = getCommitInfo(commitUrl);
+		$e.after($(`
+			<div>
+				<img
+						alt="@${commitInfo.authorName}"
+						class="avatar"
+						height="24"
+						src="${commitInfo.authorAvatarUrl}"
+						width="24"
+					>
+				<a href="commitInfo.url">${commitInfo.hash.substring(0, 7)}</a>
+				<strong>${commitInfo.title}</strong>
+				(${commitInfo.filesList.length} files)
+			</div>
+		`));
+		$e.remove();
 	});
 }
 
@@ -129,6 +159,109 @@ function getCommitUrls() {
 	    .map(function (e) {
 	        return 'https://' + window.location.hostname + $(e).attr("href");
 	    });
+}
+
+function httpGet(url) {
+	var httpRequest = new XMLHttpRequest();
+	httpRequest.open("GET", url, false);
+	httpRequest.send();
+	return httpRequest.responseText;
+}
+
+function getCommitInfo (commitUrl) {
+	var urlParts = splitCommitUrl(commitUrl);
+	var commitHtml = httpGet(commitUrl);
+	var $commitPage = $(commitHtml);
+
+	var $$ = $commitPage.find.bind($commitPage);
+
+	var filesDiffLines = $$(".diff-view .file.js-details-container")
+		.toArray()
+		.map(getFileDiffLines);
+
+	return {
+		url: commitUrl,
+		hash: $$(".commit .sha").text(),
+		title: $$(".commit .commit-title").text(),
+		authorName: $$(".commit .commit-author-section .user-mention").text(),
+		authorAvatarUrl: $$(".commit .commit-author-section .avatar").attr("src"),
+		files: listToDict(filesDiffLines, diffLines => diffLines.filename),
+		filesList: filesDiffLines,
+	};
+}
+
+function listToDict (list, keyFunction) {
+	var dict = {};
+
+	for (var item of list) {
+		var key = keyFunction(item);
+		dict[key] = item;
+	}
+
+	return dict;
+}
+
+function getFileDiffLines (file) {
+	var $file = $(file);
+	var filename = $file
+		.find(".file-header")
+		.attr("data-path");
+	var $diffLines = $file
+		.find(".diff-table > tbody > tr:not(.js-expandable-line)");
+	var diffLines = $diffLines
+		.toArray()
+		.map(getDiffLineInfo);
+	fillDiffLineInfosOriginalLineNumber(diffLines);
+
+	return {
+		filename: filename,
+		diffLines: diffLines,
+	};
+}
+
+function getDiffLineInfo (e) {
+	var $e = $(e);
+	var $tds = $e.children();
+
+	return {
+		originalLineNumber: $($tds[0]).attr("data-line-number"),
+		newLineNumber: $($tds[1]).attr("data-line-number"),
+		type: getDiffLineType($($tds[2])),
+	};
+}
+
+function getDiffLineType ($e) {
+	if ($e.hasClass('blob-code-addition')) {
+		return 'addition';
+	} else if ($e.hasClass('blob-code-deletion')) {
+		return 'deletion';
+	} else {
+		return 'unchanged';
+	}
+}
+
+function fillDiffLineInfosOriginalLineNumber (diffLines) {
+	var previousOriginalLineNumber = 0;
+	for (var diffLine of diffLines) {
+		if (diffLine.originalLineNumber === undefined) {
+			diffLine.originalLineNumber = previousOriginalLineNumber;
+		} else {
+			previousOriginalLineNumber = diffLine.originalLineNumber;
+		}
+	}
+}
+
+function splitCommitUrl (url) {
+	var partsList = url.split('/');
+	return {
+		protocol: partsList[0], // https:
+		// partsList[1], //
+		host: partsList[2],	// github.com
+		organisation: partsList[3],
+		project: partsList[4],
+		// partsList[5], // commit
+		hash: partsList[6],
+	};
 }
 
 init();
