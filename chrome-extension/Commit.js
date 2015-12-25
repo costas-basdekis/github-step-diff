@@ -46,6 +46,10 @@ class Commit extends UrlBased {
     getCommitFiles () {
         this.getCommitInfo();
 
+        if (this._filesList) {
+            return;
+        }
+
         this._filesList = this.$(".diff-view .file.js-details-container")
             .toArray()
             .map(this.getFileDiffLines.bind(this));
