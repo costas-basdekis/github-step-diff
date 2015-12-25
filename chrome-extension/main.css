@@ -1,7 +1,7 @@
 .tabcontent {
-	display: none;
+    display: none;
 }
 
 .tabcontent.is-visible {
-	display: block;
+    display: block;
 }
