@@ -68,7 +68,7 @@ class Commit extends UrlBased {
             .find(".file-header")
             .attr("data-path");
         var $diffLines = $file
-            .find(".diff-table > tbody > tr:not(.js-expandable-line)");
+            .find(".diff-table > tbody > tr:not(.js-expandable-line):not([data-position=0])");
         var diffLines = $diffLines
             .toArray()
             .map(this.getDiffLineInfo.bind(this));
