@@ -1,4 +1,5 @@
-Templates.register('step-diff/files', ctx => ((commit, PREVIOUS_BLOB_NUM_CLASSES, CURRENT_BLOB_NUM_CLASSES) => forIn(commit.filesList, file => `
+Templates.register('step-diff/files', function (ctx) {with (ctx) {return
+forIn(commit.filesList, file => `
     <div
             id="diff-${file.uuid}"
             class="file js-details-container show-inline-notes"
@@ -63,4 +64,5 @@ Templates.register('step-diff/files', ctx => ((commit, PREVIOUS_BLOB_NUM_CLASSES
             </table>
         </div>
     </div>
-`))(ctx.commit, ctx.PREVIOUS_BLOB_NUM_CLASSES, ctx.CURRENT_BLOB_NUM_CLASSES));
+`)
+;}});
