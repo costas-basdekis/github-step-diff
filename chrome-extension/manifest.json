@@ -18,6 +18,8 @@
         "Templates.js",
         "UrlBased.js",
         "Commit.js",
+        "FileStepDiff.js",
+        "CommitStepDiff.js",
         "PullRequest.js",
         "StepDiff.js",
         "templates/step-diff/files.js",
