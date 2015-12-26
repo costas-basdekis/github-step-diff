@@ -5,3 +5,11 @@
 .tabcontent.is-visible {
     display: block;
 }
+
+.view-step-diff {
+    border: 1px solid blue;
+    border-radius: 15px;
+    padding: 2px 7px;
+    background: blue;
+    color: white;
+}

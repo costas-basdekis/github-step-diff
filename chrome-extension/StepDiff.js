@@ -74,6 +74,11 @@ class StepDiff {
                     ${forIn(this.pullRequest.commits, commit => `
                         <li>
                             <div>
+                                <a
+                                        href="#"
+                                        class="btn btn-sm js-view-step-diff"
+                                        data-hash="${commit.hash}"
+                                    >View step diff</a>
                                 <img
                                         alt="@${commit.authorName}"
                                         class="avatar"
@@ -93,6 +98,7 @@ class StepDiff {
                         </li>
                     `)}
                 </ul>
+                <div class="js-step-diff-container"></div>
             </div>
         `);
 
@@ -111,6 +117,20 @@ class StepDiff {
         }.bind(this));
     }
     bindStepDiffsCommits () {
+        $(".js-view-step-diff").click(function (event) {
+            var $e = $(event.target);
+            var commitHash = $e.attr("data-hash");
+            var commit = this.pullRequest.byHash(commitHash);
+
+            var $stepDiffContainer= $(".js-step-diff-container");
+
+            var filesHtml = Templates.render('step-diff/files', {
+                commit: commit,
+            });
+            $stepDiffContainer
+                .text("")
+                .append(filesHtml);
+        }.bind(this));
         $(".js-step-diff-commit").click(function (event) {
             var $e = $(event.target);
             var commitHash = $e.attr("data-hash");
@@ -137,3 +157,4 @@ class StepDiff {
             .addClass("selected");
     }
 }
+StepDiff.templates = StepDiff.prototype.templates = {};
