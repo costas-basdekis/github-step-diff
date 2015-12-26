@@ -1,4 +1,4 @@
-Templates.register('step-diff/files', function (ctx) {with (ctx) {return
+Templates.register('step-diff/files', function (ctx) {with (ctx) {return (
 forIn(commit.filesList, file => `
     <div
             id="diff-${file.uuid}"
@@ -65,4 +65,4 @@ forIn(commit.filesList, file => `
         </div>
     </div>
 `)
-;}});
+);}});
