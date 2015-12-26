@@ -32,6 +32,17 @@ function listToMultiDict (list, keyFunction) {
     return dict;
 }
 
+function reverseDict (dict) {
+    var reversed = {};
+
+    for (var key in dict) {
+        var value = dict[key];
+        reversed[value] = key;
+    }
+
+    return reversed;
+}
+
 function forIn(list, lambda) {
     return list
         .map(lambda)
