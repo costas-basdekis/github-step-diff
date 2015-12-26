@@ -18,6 +18,20 @@ function listToDict (list, keyFunction) {
     return dict;
 }
 
+function listToMultiDict (list, keyFunction) {
+    var dict = {};
+
+    for (var item in list) {
+        var key = keyFunction(item);
+        if (!(key in dict)) {
+            dict[key] = [];
+        }
+        dict[key].push(item);
+    }
+
+    return dict;
+}
+
 function forIn(list, lambda) {
     return list
         .map(lambda)
