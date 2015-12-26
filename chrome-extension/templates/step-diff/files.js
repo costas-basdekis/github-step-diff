@@ -46,18 +46,20 @@ forIn(commit.filesList, file => `
         <div class="data highlight blob-wrapper">
             <table class="diff-table tab-size" data-tab-size="8">
                 <tbody>
-                    ${forIn(file.diffLines, line => `
+                    ${forIn(commit.stepDiff.byFilename(file.filename).lines, line => `
                         <tr>
                             <td
                                     data-line-number="${line.originalLineNumber || ''}"
-                                    class="blob-num blob-num-context ${PREVIOUS_BLOB_NUM_CLASSES[line.compositeType]} js-linkable-line-number"></td>
+                                    class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.originalType]} js-linkable-line-number"></td>
                             <td
-                                    data-line-number="${line.oldLineNumber || ''}"
-                                    class="blob-num blob-num-context ${PREVIOUS_BLOB_NUM_CLASSES[line.compositeType]} js-linkable-line-number"></td>
+                                    data-line-number="${line.previousLineNumber || ''}"
+                                    class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.previousType]} js-linkable-line-number"></td>
                             <td
-                                    data-line-number="${line.newLineNumber || ''}"
-                                    class="blob-num blob-num-context ${CURRENT_BLOB_NUM_CLASSES[line.compositeType]} js-linkable-line-number"></td>
-                            <td class="blob-code blob-code-context">${line.codeHtml}</td>
+                                    data-line-number="${line.currentLineNumber || ''}"
+                                    class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.currentType]} js-linkable-line-number"></td>
+                            <td
+                                    class="blob-code blob-code-context ${BLOB_CODE_CLASS[line.currentType]}"
+                                >${line.codeHtml}</td>
                         </tr>
                     `)}
                 </tbody>

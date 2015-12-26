@@ -8,6 +8,7 @@ class Commit extends UrlBased {
             this._authorName = info.authorName;
             this._authorAvatarUrl = info.authorAvatarUrl;
         }
+        this.previousCommit = null;
     }
     splitCommitUrl () {
         if (this._hash) {
@@ -74,6 +75,9 @@ class Commit extends UrlBased {
             .map(this.getDiffLineInfo.bind(this));
         this.fillDiffLineInfosOriginalOldLineNumber(diffLines);
 
+        var diffLinesByOldLineNumber = listToMultiDict(diffLines, line => line.oldLineNumber);
+        var diffLinesByNewLineNumber = listToMultiDict(diffLines, line => line.newLineNumber);
+
         var $diffstat =$file
             .find(".file-header .diffstat")
             .attr("aria-label");
@@ -90,6 +94,8 @@ class Commit extends UrlBased {
         return {
             filename: filename,
             diffLines: diffLines,
+            diffLinesByOldLineNumber: diffLinesByOldLineNumber,
+            diffLinesByNewLineNumber: diffLinesByNewLineNumber,
             lineAdditions: lineAdditions,
             lineDeletions: lineDeletions,
             lineChanges: lineChanges,
@@ -105,11 +111,11 @@ class Commit extends UrlBased {
         return {
             oldLineNumber: $($tds[0]).attr("data-line-number"),
             newLineNumber: $($tds[1]).attr("data-line-number"),
-            type: this.getDiffLineType($($tds[2])),
+            type: this.getNumDiffLineType($($tds[0])),
             codeHtml: $($tds[2]).html(),
         };
     }
-    getDiffLineType ($e) {
+    getNumDiffLineType ($e) {
         for (var className in Commit.BLOB_NUM_TYPE) {
             var type = Commit.BLOB_NUM_TYPE[className];
             if ($e.hasClass(className)) {
@@ -128,16 +134,36 @@ class Commit extends UrlBased {
             }
         }
     }
+
+    getStepDiff () {
+        if (this._stepDiff) {
+            return;
+        }
+
+        if (this.previousCommit) {
+            var previousStepDiff = this.previousCommit.stepDiff;
+            this._stepDiff = previousStepDiff.combine(this);
+        } else {
+            this._stepDiff = new CommitStepDiff(this);
+        }
+    }
+    get stepDiff () {this.getStepDiff(); return this._stepDiff;};
 }
+
 Commit.BLOB_NUM_TYPE = {
+    'blob-num-addition': 'addition',
+    'blob-num-deletion': 'deletion',
+    'blob-num-context': 'unchanged',
+};
+Commit.BLOB_NUM_CLASS = reverseDict(Commit.BLOB_NUM_TYPE);
+Commit.BLOB_CODE_TYPE = {
     'blob-code-addition': 'addition',
     'blob-code-deletion': 'deletion',
-    '': 'unchanged',
+    'blob-code-context': 'unchanged',
 };
-Commit.PREVIOUS_BLOB_NUM_CLASSES = {
-};
-Commit.CURRENT_BLOB_NUM_CLASSES = {
-};
+Commit.BLOB_CODE_CLASS = reverseDict(Commit.BLOB_CODE_TYPE);
+
 Templates.default('BLOB_NUM_TYPE', Commit.BLOB_NUM_TYPE);
-Templates.default('PREVIOUS_BLOB_NUM_CLASSES', Commit.PREVIOUS_BLOB_NUM_CLASSES);
-Templates.default('CURRENT_BLOB_NUM_CLASSES', Commit.CURRENT_BLOB_NUM_CLASSES);
+Templates.default('BLOB_NUM_CLASS', Commit.BLOB_NUM_CLASS);
+Templates.default('BLOB_CODE_TYPE', Commit.BLOB_CODE_TYPE);
+Templates.default('BLOB_CODE_CLASS', Commit.BLOB_CODE_CLASS);

@@ -18,6 +18,11 @@ class PullRequest extends UrlBased {
                     authorAvatarUrl: $e.find(".avatar").attr("src"),
                 });
             });
+        var previousCommit = null;
+        for (var commit of this._commits) {
+            commit.previousCommit = previousCommit;
+            previousCommit = commit;
+        }
         this._commitsByHash = listToDict(this._commits, commit => commit.hash);
     }
     get commits() {this.getCommits(); return this._commits;};
