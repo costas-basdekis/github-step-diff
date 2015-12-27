@@ -13,3 +13,13 @@
     background: blue;
     color: white;
 }
+
+.blob-num-addition.blob-num-addition-then-unchanged,
+.blob-code-addition.blob-code-addition-then-unchanged {
+    background-color: ghostwhite; /* mintcream */
+}
+
+.blob-num-deletion.blob-num-deletion-then-unchanged,
+.blob-code-deletion.blob-code-deletion-then-unchanged {
+    background-color: cornsilk;
+}
