@@ -9,7 +9,7 @@ class FileStepDiff {
     create () {
         this.lines = this.file.diffLines
             .map(line => ({
-                originalLineNumber: undefined,
+                originalLineNumber: line.oldLineNumber,
                 previousLineNumber: line.oldLineNumber,
                 currentLineNumber: line.newLineNumber,
                 originalType: "unchanged",
