@@ -1,12 +1,12 @@
 "use strict";
 
 class FileStepDiff {
-    constructor(file) {
+    constructor (file) {
         this.file = file;
         this.previousStepDiff = null;
         this.create();
     }
-    create() {
+    create () {
         this.lines = this.file.diffLines
             .map(line => ({
                 originalLineNumber: undefined,
