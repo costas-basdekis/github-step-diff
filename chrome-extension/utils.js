@@ -1,6 +1,22 @@
 "use strict";
 
-function httpGet(url) {
+function httpGet(url, useCache) {
+    if (!useCache && useCache !== undefined) {
+        return httpGetUncached(url);
+    }
+
+    var cachedPages = JSON.parse(
+        localStorage.getItem('cachedPages') || JSON.stringify({}));
+
+    if (!(url in cachedPages)) {
+        cachedPages[url] = httpGetUncached(url);
+        localStorage.setItem('cachedPages', JSON.stringify(cachedPages));
+    }
+
+    return cachedPages[url];
+}
+
+function httpGetUncached(url) {
     var httpRequest = new XMLHttpRequest();
     httpRequest.open("GET", url, false);
     httpRequest.send();
