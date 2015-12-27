@@ -85,6 +85,27 @@ function dictValues (dict, sortKeyFunction) {
     return sorted;
 }
 
+function compareLists(lhs, rhs) {
+    for (var index in lhs) {
+        if (index >= rhs.length) {
+            return 1;
+        }
+
+        var lv = lhs[index], rv = rhs[index];
+        if (lv < rv) {
+            return -1;
+        } else if (lv > rv) {
+            return 1;
+        }
+    }
+
+    if (lhs.length < rhs.length) {
+        return -1;
+    }
+
+    return 0;
+}
+
 function forIn(list, lambda) {
     return list
         .map(lambda)
