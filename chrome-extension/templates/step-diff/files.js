@@ -1,5 +1,5 @@
 Templates.register('step-diff/files', function (ctx) {with (ctx) {return (
-forIn(commit.filesList, file => `
+forIn(commit.stepDiff.filesList, fileDiff => ((fileDiff, file) => `
     <div
             id="diff-${file.uuid}"
             class="file js-details-container show-inline-notes"
@@ -46,19 +46,22 @@ forIn(commit.filesList, file => `
         <div class="data highlight blob-wrapper">
             <table class="diff-table tab-size" data-tab-size="8">
                 <tbody>
-                    ${forIn(commit.stepDiff.byFilename(file.filename).lines, line => `
-                        <tr>
+                    ${forIn(fileDiff.lines, line => `
+                        <tr data-type="${line.compoundType}">
                             <td
                                     data-line-number="${line.originalLineNumber || ''}"
-                                    class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.originalType]} js-linkable-line-number"></td>
+                                    class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.compoundType]} js-linkable-line-number"></td>
                             <td
                                     data-line-number="${line.previousLineNumber || ''}"
-                                    class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.previousType]} js-linkable-line-number"></td>
+                                    class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.compoundType]} js-linkable-line-number"></td>
                             <td
-                                    data-line-number="${line.currentLineNumber || ''}"
-                                    class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.currentType]} js-linkable-line-number"></td>
+                                    data-line-number="${line.oldLineNumber || ''}"
+                                    class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.compoundType]} js-linkable-line-number"></td>
                             <td
-                                    class="blob-code blob-code-context ${BLOB_CODE_CLASS[line.currentType]}"
+                                    data-line-number="${line.newLineNumber || ''}"
+                                    class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.compoundType]} js-linkable-line-number"></td>
+                            <td
+                                    class="blob-code blob-code-context ${BLOB_CODE_CLASS[line.compoundType]}"
                                 >${line.codeHtml}</td>
                         </tr>
                     `)}
@@ -66,5 +69,5 @@ forIn(commit.filesList, file => `
             </table>
         </div>
     </div>
-`)
+`)(fileDiff, fileDiff.file))
 );}});

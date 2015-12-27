@@ -11,25 +11,32 @@ class FileStepDiff {
             .map(line => ({
                 originalLineNumber: line.oldLineNumber,
                 previousLineNumber: line.oldLineNumber,
-                currentLineNumber: line.newLineNumber,
-                originalType: "unchanged",
+                oldLineNumber: line.oldLineNumber,
+                newLineNumber: line.newLineNumber,
+                originalType: line.type,
                 previousType: "unchanged",
                 currentType: line.type,
-                compoundType: `unchanged-then-${line.type}`,
                 codeHtml: line.codeHtml,
             }));
+        this.lines
+            .forEach(function (line) {
+                Object.assign(line, {
+                    compoundType: `${line.originalType}-then-${line.currentType}`,
+                });
+            })
         this._fromLines();
     }
     _fromLines () {
         this.linesByOriginalLineNumber = listToMultiDict(this.lines, line => line.originalLineNumber);
         this.linesByPreviousLineNumber = listToMultiDict(this.lines, line => line.previousLineNumber);
-        this.linesByCurrentLineNumber = listToMultiDict(this.lines, line => line.currentLineNumber);
+        this.linesByOldLineNumber = listToMultiDict(this.lines, line => line.oldLineNumber);
+        this.linesByNewLineNumber = listToMultiDict(this.lines, line => line.newLineNumber);
     }
     copy () {
         return new FileStepDiff(this.file);
     }
     convertToPrevious () {
-        this.lines = this.lines
+        this.lines
             .forEach(function (line) {
                 Object.assign(line, {
                     previousLineNumber: line.currentLineNumber,
@@ -47,5 +54,7 @@ class FileStepDiff {
         return copy;
     }
     combine (previousStepDiff) {
+        this.lines = previousStepDiff.lines;
+        this._fromLines();
     }
 }
