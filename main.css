@@ -1,9 +1,0 @@
-tr.js-then-addition td.js-future-line-number,
-tr.js-then-addition td.blob-code {
-    background-color: #dbdbff;
-}
-
-tr.js-was-addition.js-then-deletion td.js-future-line-number,
-tr.js-was-addition.js-then-deletion td.blob-code {
-    background-color: #ff7f50;
-}
