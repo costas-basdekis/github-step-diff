@@ -69,6 +69,22 @@ function dictKeys (dict) {
     return keys;
 }
 
+function dictValues (dict, sortKeyFunction) {
+    sortKeyFunction = sortKeyFunction || ((key, value) => key);
+    var list = [];
+    for (var key in dict) {
+        var value = dict[key];
+        var sortKey = key;
+        if (sortKeyFunction) {
+            sortKey = sortKeyFunction(key, value);
+        }
+        list.push([sortKey, value]);
+    }
+    list.sort(sortKeyValueTuple => sortKeyValueTuple[0]);
+    var sorted = list.map(sortKeyValueTuple => sortKeyValueTuple[1]);
+    return sorted;
+}
+
 function forIn(list, lambda) {
     return list
         .map(lambda)
