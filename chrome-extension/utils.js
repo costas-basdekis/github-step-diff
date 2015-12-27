@@ -61,7 +61,7 @@ function reverseDict (dict) {
 
 function dictKeys (dict) {
     var keys = [];
-    
+
     for (var key in dict) {
         keys.push(key);
     }
