@@ -28,7 +28,23 @@ class FileStepDiff {
     copy () {
         return new FileStepDiff(this.file);
     }
+    convertToPrevious () {
+        this.lines = this.lines
+            .forEach(function (line) {
+                Object.assign(line, {
+                    previousLineNumber: line.currentLineNumber,
+                    previousType: line.currentType,
+                    currentType: "unchanged",
+                    compoundType: `${line.currentType}-then-unchanged`,
+                });
+            });
+        this._fromLines();
+    }
     copyAsPrevious () {
+        var copy = this.copy();
+        copy.convertToPrevious();
+
+        return copy;
     }
     combine (previousStepDiff) {
     }
