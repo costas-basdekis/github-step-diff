@@ -44,9 +44,10 @@ class FileStepDiff {
         this.lines.sort(FileStepDiff.compareLines);
     }
     static compareLines (lhs, rhs) {
+        var lOriginal = parseInt(lhs.originalLineNumber), rOriginal = parseInt(rhs.originalLineNumber);
         var lOld = parseInt(lhs.oldLineNumber) || 0, rOld = parseInt(rhs.oldLineNumber) || 0;
         var lNew = parseInt(lhs.newLineNumber) || 0, rNew = parseInt(rhs.newLineNumber) || 0;
-        return compareLists([lOld, lNew], [rOld, rNew]);
+        return compareLists([lOriginal, lOld, lNew], [rOriginal, rOld, rNew]);
     }
     byNewLineNumber (lineNumber) {
         return this.linesByNewLineNumber[lineNumber];
@@ -86,22 +87,28 @@ class FileStepDiff {
                 continue;
             }
 
+            // There should only be one
+            var previousLine = previousLines[0];
             if (currentLine.currentType === "deletion") {
-                // There should only be one
-                var previousLine = previousLines[0];
                 this.linesByOldLineNumber[currentLineNumber] =
                     [Object.assign({}, currentLine, {
+                        originalLineNumber: previousLine.originalLineNumber,
                         previousLineNumber: previousLine.newLineNumber,
                         originalType: previousLine.currentType,
                     })];
             } else if (currentLine.currentType === "unchanged") {
                 if (!(currentLineNumber in this.linesByOldLineNumber)) {
-                    this.linesByOldLineNumber[currentLineNumber] = [currentLine];
+                    this.linesByOldLineNumber[currentLineNumber] =
+                    [Object.assign({}, currentLine, {
+                        originalLineNumber: 0,
+                    })];
                 }
             } else {
                 var lines = this.linesByOldLineNumber[currentLineNumber] =
                     this.linesByOldLineNumber[currentLineNumber] || [];
-                lines.push(currentLine);
+                lines.push(Object.assign({}, currentLine, {
+                    originalLineNumber: previousLine.originalLineNumber,
+                }));
             }
         }
         this._createLinesFromLookupByOldLineNumber();
