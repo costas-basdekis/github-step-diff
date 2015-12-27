@@ -59,6 +59,16 @@ function reverseDict (dict) {
     return reversed;
 }
 
+function dictKeys (dict) {
+    var keys = [];
+    
+    for (var key in dict) {
+        keys.push(key);
+    }
+
+    return keys;
+}
+
 function forIn(list, lambda) {
     return list
         .map(lambda)
