@@ -155,13 +155,35 @@ Commit.BLOB_NUM_TYPE = {
     'blob-num-deletion': 'deletion',
     'blob-num-context': 'unchanged',
 };
-Commit.BLOB_NUM_CLASS = reverseDict(Commit.BLOB_NUM_TYPE);
+Commit.BLOB_NUM_CLASS = Object.assign(reverseDict(Commit.BLOB_NUM_TYPE), {
+    'addition-then-addition': 'blob-num-addition',
+    'addition-then-deletion': 'blob-num-addition blob-num-addition-then-deletion',
+    'addition-then-unchanged': 'blob-num-addition blob-num-addition-then-unchanged',
+
+    'deletion-then-deletion': 'blob-num-deletion',
+    'deletion-then-unchanged': 'blob-num-deletion blob-num-deletion-then-unchanged',
+
+    'unchanged-then-addition': 'blob-num-addition',
+    'unchanged-then-deletion': 'blob-num-deletion',
+    'unchanged-then-unchanged': 'blob-num-context',
+});
 Commit.BLOB_CODE_TYPE = {
     'blob-code-addition': 'addition',
     'blob-code-deletion': 'deletion',
     'blob-code-context': 'unchanged',
 };
-Commit.BLOB_CODE_CLASS = reverseDict(Commit.BLOB_CODE_TYPE);
+Commit.BLOB_CODE_CLASS = Object.assign(reverseDict(Commit.BLOB_CODE_TYPE), {
+    'addition-then-addition': 'blob-code-addition',
+    'addition-then-deletion': 'blob-code-addition blob-code-addition-then-deletion',
+    'addition-then-unchanged': 'blob-code-addition blob-code-addition-then-unchanged',
+
+    'deletion-then-deletion': 'blob-code-deletion',
+    'deletion-then-unchanged': 'blob-code-deletion blob-code-deletion-then-unchanged',
+
+    'unchanged-then-addition': 'blob-code-addition',
+    'unchanged-then-deletion': 'blob-code-deletion',
+    'unchanged-then-unchanged': 'blob-code-context',
+});
 
 Templates.default('BLOB_NUM_TYPE', Commit.BLOB_NUM_TYPE);
 Templates.default('BLOB_NUM_CLASS', Commit.BLOB_NUM_CLASS);
