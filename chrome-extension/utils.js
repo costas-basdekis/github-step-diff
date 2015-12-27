@@ -37,7 +37,7 @@ function listToDict (list, keyFunction) {
 function listToMultiDict (list, keyFunction) {
     var dict = {};
 
-    for (var item in list) {
+    for (var item of list) {
         var key = keyFunction(item);
         if (!(key in dict)) {
             dict[key] = [];
