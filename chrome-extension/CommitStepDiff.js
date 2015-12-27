@@ -19,14 +19,16 @@ class CommitStepDiff {
 		return this.files[filename];
 	}
 	combine (previousStepDiff) {
-		for (var previousFile of previousStepDiff.filesList) {
-			var file = this.byFilename(previousFile.filename);
-			if (file) {
-				file.combine(previousFile);
+		for (var previousFileDiff of previousStepDiff.filesList) {
+			var previousFile = previousFileDiff.file;
+			var fileDiff = this.byFilename(previousFile.filename);
+			if (fileDiff) {
+				fileDiff.combine(previousFileDiff);
 			} else {
-				file = previousFile.copyAsPrevious();
-				this.filesList.push(file);
+				fileDiff = previousFileDiff.copyAsPrevious();
+				this.filesList.push(fileDiff);
 			}
 		}
+		this._fromFilesList();
 	}
 }
