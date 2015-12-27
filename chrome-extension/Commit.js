@@ -144,7 +144,7 @@ class Commit extends UrlBased {
 
         if (this.previousCommit) {
             var previousStepDiff = this.previousCommit.stepDiff;
-            this._stepDiff.cobmine(previousStepDiff);
+            this._stepDiff.combine(previousStepDiff);
         }
     }
     get stepDiff () {this.getStepDiff(); return this._stepDiff;};
