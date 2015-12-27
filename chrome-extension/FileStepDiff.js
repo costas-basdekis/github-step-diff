@@ -25,5 +25,8 @@ class FileStepDiff {
         this.linesByPreviousLineNumber = listToMultiDict(this.lines, line => line.previousLineNumber);
         this.linesByCurrentLineNumber = listToMultiDict(this.lines, line => line.currentLineNumber);
     }
+    copyAsPrevious () {
+    }
+    combine (previousStepDiff) {
     }
 }

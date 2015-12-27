@@ -140,11 +140,11 @@ class Commit extends UrlBased {
             return;
         }
 
+        this._stepDiff = new CommitStepDiff(this);
+
         if (this.previousCommit) {
             var previousStepDiff = this.previousCommit.stepDiff;
-            this._stepDiff = previousStepDiff.combine(this);
-        } else {
-            this._stepDiff = new CommitStepDiff(this);
+            this._stepDiff.cobmine(previousStepDiff);
         }
     }
     get stepDiff () {this.getStepDiff(); return this._stepDiff;};
