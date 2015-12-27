@@ -18,5 +18,12 @@ class FileStepDiff {
                 compoundType: `unchanged-then-${line.type}`,
                 codeHtml: line.codeHtml,
             }));
+        this._fromLines();
+    }
+    _fromLines () {
+        this.linesByOriginalLineNumber = listToMultiDict(this.lines, line => line.originalLineNumber);
+        this.linesByPreviousLineNumber = listToMultiDict(this.lines, line => line.previousLineNumber);
+        this.linesByCurrentLineNumber = listToMultiDict(this.lines, line => line.currentLineNumber);
+    }
     }
 }
