@@ -7,6 +7,9 @@ class FileStepDiff {
         this.create();
     }
     create () {
+        this._loadFromFile();
+    }
+    _loadFromFile () {
         this.lines = this.file.diffLines
             .map(line => ({
                 originalLineNumber: line.oldLineNumber,
@@ -18,15 +21,18 @@ class FileStepDiff {
                 currentType: line.type,
                 codeHtml: line.codeHtml,
             }));
+        this._setCompoundType();
+        this._createLookupsFromLines();
+    }
+    _setCompoundType () {
         this.lines
             .forEach(function (line) {
                 Object.assign(line, {
                     compoundType: `${line.originalType}-then-${line.currentType}`,
                 });
             })
-        this._fromLines();
     }
-    _fromLines () {
+    _createLookupsFromLines () {
         this.linesByOriginalLineNumber = listToMultiDict(this.lines, line => line.originalLineNumber);
         this.linesByPreviousLineNumber = listToMultiDict(this.lines, line => line.previousLineNumber);
         this.linesByOldLineNumber = listToMultiDict(this.lines, line => line.oldLineNumber);
@@ -45,7 +51,7 @@ class FileStepDiff {
                     compoundType: `${line.currentType}-then-unchanged`,
                 });
             });
-        this._fromLines();
+        this._createLookupsFromLines();
     }
     copyAsPrevious () {
         var copy = this.copy();
