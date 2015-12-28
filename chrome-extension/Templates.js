@@ -8,6 +8,7 @@ class Templates {
 		Templates.templates[path] = template;
 	}
 	static render(path, ctx) {
+		ctx = ctx || {};
 		var fullCtx = Object.assign({}, Templates.defaultCtx, ctx);
 		return Templates.templates[path](fullCtx);
 	}
