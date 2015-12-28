@@ -23,6 +23,9 @@
         "PullRequest.js",
         "StepDiff.js",
         "templates/step-diff/files.js",
+        "templates/step-diff/tabnav.js",
+        "templates/step-diff/prtabcontent.js",
+        "templates/step-diff/stepdifftabcontent.js",
         "main.js"
       ]
     }

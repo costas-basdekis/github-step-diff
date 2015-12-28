@@ -1,4 +1,4 @@
-Templates.register('step-diff/files', function (ctx) {with (ctx) {return (
+Templates.register('step-diff/files.js', function (ctx) {with (ctx) {return (
 forIn(commit.stepDiff.filesList, fileDiff => ((fileDiff, file) => `
     <div
             id="diff-${file.uuid}"
