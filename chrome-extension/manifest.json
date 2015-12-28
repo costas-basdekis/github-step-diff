@@ -15,6 +15,7 @@
       "js": [
         "jquery-2.1.1.min.js",
         "utils.js",
+        "Router.js",
         "Templates.js",
         "UrlBased.js",
         "Commit.js",

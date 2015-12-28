@@ -6,6 +6,8 @@ function init() {
     window.stepDiff = new StepDiff();
 
     console.log("github-step-diff is ready");
+
+    window.stepDiff.routeTo();
 }
 
 init();

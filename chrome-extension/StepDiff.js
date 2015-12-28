@@ -95,4 +95,21 @@ class StepDiff {
         $thisTab
             .addClass("selected");
     }
+    routeTo (hash) {
+        return this.router.routeTo(hash);
+    }
 }
+StepDiff.prototype.routes = [
+    {
+        pattern: /^#step-diff$/,
+        method: Router.routeToButtonHash,
+    },
+    {
+        pattern: /^#step-diff-([0-9a-f]+)$/,
+        method: hash => [
+            Router.routeToButtonHash('#step-diff'),
+            Router.routeToButtonHash(hash),
+        ],
+    },
+];
+StepDiff.prototype.router = new Router(StepDiff.prototype.routes);

@@ -10,7 +10,7 @@ Templates.register('step-diff/stepdifftabcontent.js', function (ctx) {with (ctx)
                 <li>
                     <div>
                         <a
-                                href="#"
+                                href="#step-diff-${commit.hash}"
                                 class="btn btn-sm js-view-step-diff"
                                 data-hash="${commit.hash}"
                             >View step diff</a>

@@ -11,7 +11,7 @@ Templates.register('step-diff/tabnav.js', function (ctx) {with (ctx) {return (
                 Pull request
             </a>
             <a
-                    href="#"
+                    href="#step-diff"
                     class="tabnav-tab js-tabnav-tab js-step-diff"
                     data-tab-group="step-diff"
                     data-tab="step-diff"
