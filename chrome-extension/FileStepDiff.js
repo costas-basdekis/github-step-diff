@@ -13,7 +13,6 @@ class FileStepDiff {
         this.lines = this.file.diffLines
             .map(line => ({
                 originalLineNumber: line.oldLineNumber,
-                previousLineNumber: line.oldLineNumber,
                 oldLineNumber: line.oldLineNumber,
                 newLineNumber: line.newLineNumber,
                 originalType: line.type,
@@ -34,7 +33,6 @@ class FileStepDiff {
     }
     _createLookupsFromLines () {
         this.linesByOriginalLineNumber = listToMultiDict(this.lines, line => line.originalLineNumber);
-        this.linesByPreviousLineNumber = listToMultiDict(this.lines, line => line.previousLineNumber);
         this.linesByOldLineNumber = listToMultiDict(this.lines, line => line.oldLineNumber);
         this.linesByNewLineNumber = listToMultiDict(this.lines, line => line.newLineNumber);
     }
@@ -59,7 +57,6 @@ class FileStepDiff {
         this.lines
             .forEach(function (line) {
                 Object.assign(line, {
-                    previousLineNumber: line.currentLineNumber,
                     oldLineNumber: line.newLineNumber,
                     previousType: line.currentType,
                     currentType: "unchanged",
@@ -93,7 +90,6 @@ class FileStepDiff {
                 this.linesByOldLineNumber[currentLineNumber] =
                     [Object.assign({}, currentLine, {
                         originalLineNumber: previousLine.originalLineNumber,
-                        previousLineNumber: previousLine.newLineNumber,
                         originalType: previousLine.currentType,
                     })];
             } else if (currentLine.currentType === "unchanged") {

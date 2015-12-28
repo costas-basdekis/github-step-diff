@@ -52,9 +52,6 @@ forIn(commit.stepDiff.filesList, fileDiff => ((fileDiff, file) => `
                                     data-line-number="${line.originalLineNumber || ''}"
                                     class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.compoundType]} js-linkable-line-number"></td>
                             <td
-                                    data-line-number="${line.previousLineNumber || ''}"
-                                    class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.compoundType]} js-linkable-line-number"></td>
-                            <td
                                     data-line-number="${line.oldLineNumber || ''}"
                                     class="blob-num blob-num-context ${BLOB_NUM_CLASS[line.compoundType]} js-linkable-line-number"></td>
                             <td
