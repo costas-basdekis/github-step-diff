@@ -96,4 +96,3 @@ class StepDiff {
             .addClass("selected");
     }
 }
-StepDiff.templates = StepDiff.prototype.templates = {};
