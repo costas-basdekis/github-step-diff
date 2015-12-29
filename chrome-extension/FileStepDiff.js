@@ -42,9 +42,9 @@ class FileStepDiff {
         this.lines.sort(FileStepDiff.compareLines);
     }
     static compareLines (lhs, rhs) {
-        var lOriginal = parseInt(lhs.originalLineNumber), rOriginal = parseInt(rhs.originalLineNumber);
-        var lOld = parseInt(lhs.oldLineNumber) || 0, rOld = parseInt(rhs.oldLineNumber) || 0;
-        var lNew = parseInt(lhs.newLineNumber) || 0, rNew = parseInt(rhs.newLineNumber) || 0;
+        var lOriginal = lhs.originalLineNumber, rOriginal = rhs.originalLineNumber;
+        var lOld = lhs.oldLineNumber, rOld = rhs.oldLineNumber;
+        var lNew = lhs.newLineNumber, rNew = rhs.newLineNumber;
         return compareLists([lOriginal, lOld, lNew], [rOriginal, rOld, rNew]);
     }
     byNewLineNumber (lineNumber) {

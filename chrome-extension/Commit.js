@@ -109,8 +109,8 @@ class Commit extends UrlBased {
         var $tds = $e.children();
 
         return {
-            oldLineNumber: $($tds[0]).attr("data-line-number"),
-            newLineNumber: $($tds[1]).attr("data-line-number"),
+            oldLineNumber: parseInt($($tds[0]).attr("data-line-number")) || 0,
+            newLineNumber: parseInt($($tds[1]).attr("data-line-number")) || 0,
             type: this.getNumDiffLineType($($tds[0])),
             codeHtml: $($tds[2]).html(),
         };
@@ -127,7 +127,7 @@ class Commit extends UrlBased {
     fillDiffLineInfosOriginalOldLineNumber (diffLines) {
         var previousOldLineNumber = 0;
         for (var diffLine of diffLines) {
-            if (diffLine.oldLineNumber === undefined) {
+            if (diffLine.oldLineNumber === 0) {
                 diffLine.oldLineNumber = previousOldLineNumber;
             } else {
                 previousOldLineNumber = diffLine.oldLineNumber;
