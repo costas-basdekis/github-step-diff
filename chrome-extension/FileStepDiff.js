@@ -59,9 +59,9 @@ class FileStepDiff {
                     oldLineNumber: line.newLineNumber,
                     originalType: line.currentType,
                     currentType: "unchanged",
-                    compoundType: `${line.currentType}-then-unchanged`,
                 });
             });
+        this._setCompoundType();
         this._createLookupsFromLines();
     }
     copyAsPrevious () {
