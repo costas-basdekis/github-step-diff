@@ -167,6 +167,11 @@ Commit.BLOB_NUM_CLASS = Object.assign(reverseDict(Commit.BLOB_NUM_TYPE), {
     'unchanged-then-deletion': 'blob-num-deletion',
     'unchanged-then-unchanged': 'blob-num-context',
 });
+Commit.BLOB_NUM_CLASS_THEN_UNCHANGED = {
+    'addition': Commit.BLOB_NUM_CLASS['addition-then-unchanged'],
+    'deletion': Commit.BLOB_NUM_CLASS['deletion-then-unchanged'],
+    'unchanged': Commit.BLOB_NUM_CLASS['unchanged-then-unchanged'],
+};
 Commit.BLOB_CODE_TYPE = {
     'blob-code-addition': 'addition',
     'blob-code-deletion': 'deletion',
@@ -184,8 +189,15 @@ Commit.BLOB_CODE_CLASS = Object.assign(reverseDict(Commit.BLOB_CODE_TYPE), {
     'unchanged-then-deletion': 'blob-code-deletion',
     'unchanged-then-unchanged': 'blob-code-context',
 });
+Commit.BLOB_CODE_CLASS_THEN_UNCHANGED = {
+    'addition': Commit.BLOB_CODE_CLASS['addition-then-unchanged'],
+    'deletion': Commit.BLOB_CODE_CLASS['deletion-then-unchanged'],
+    'unchanged': Commit.BLOB_CODE_CLASS['unchanged-then-unchanged'],
+};
 
 Templates.default('BLOB_NUM_TYPE', Commit.BLOB_NUM_TYPE);
 Templates.default('BLOB_NUM_CLASS', Commit.BLOB_NUM_CLASS);
+Templates.default('BLOB_NUM_CLASS_THEN_UNCHANGED', Commit.BLOB_NUM_CLASS_THEN_UNCHANGED);
 Templates.default('BLOB_CODE_TYPE', Commit.BLOB_CODE_TYPE);
 Templates.default('BLOB_CODE_CLASS', Commit.BLOB_CODE_CLASS);
+Templates.default('BLOB_CODE_CLASS_THEN_UNCHANGED', Commit.BLOB_CODE_CLASS_THEN_UNCHANGED);
