@@ -15,7 +15,7 @@ class FileStepDiff {
                 originalLineNumber: line.oldLineNumber,
                 oldLineNumber: line.oldLineNumber,
                 newLineNumber: line.newLineNumber,
-                originalType: line.type,
+                originalType: "unchanged",
                 currentType: line.type,
                 codeHtml: line.codeHtml,
             }));
@@ -89,7 +89,7 @@ class FileStepDiff {
                 this.linesByOldLineNumber[currentLineNumber] =
                     [Object.assign({}, currentLine, {
                         originalLineNumber: previousLine.originalLineNumber,
-                        originalType: previousLine.currentType,
+                        originalType: previousLine.originalType,
                     })];
             } else if (currentLine.currentType === "unchanged") {
                 if (!(currentLineNumber in this.linesByOldLineNumber)) {
