@@ -107,6 +107,7 @@ class FileStepDiff {
             }
         }
         this._createLinesFromLookupByOldLineNumber();
+        this._setCompoundType();
         this._createLookupsFromLines();
     }
 }
