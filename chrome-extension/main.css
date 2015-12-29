@@ -23,3 +23,8 @@
 .blob-code-deletion.blob-code-deletion-then-unchanged {
     background-color: cornsilk;
 }
+
+.blob-num-addition.blob-num-addition-then-deletion,
+.blob-code-addition.blob-code-addition-then-deletion {
+    background-color: burlywood;
+}
