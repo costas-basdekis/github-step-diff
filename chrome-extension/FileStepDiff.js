@@ -16,7 +16,6 @@ class FileStepDiff {
                 oldLineNumber: line.oldLineNumber,
                 newLineNumber: line.newLineNumber,
                 originalType: line.type,
-                previousType: "unchanged",
                 currentType: line.type,
                 codeHtml: line.codeHtml,
             }));
@@ -58,7 +57,7 @@ class FileStepDiff {
             .forEach(function (line) {
                 Object.assign(line, {
                     oldLineNumber: line.newLineNumber,
-                    previousType: line.currentType,
+                    originalType: line.currentType,
                     currentType: "unchanged",
                     compoundType: `${line.currentType}-then-unchanged`,
                 });
