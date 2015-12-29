@@ -75,39 +75,55 @@ class FileStepDiff {
             var currentLineNumber = currentLine.oldLineNumber;
             var previousLines = this.byNewLineNumber(currentLineNumber);
             if (!previousLines) {
-                this.linesByOldLineNumber[currentLineNumber] =
-                    [Object.assign({}, currentLine, {
-                        oldLineNumber: currentLineNumber,
-                        newLineNumber: currentLineNumber,
-                    })];
-                continue;
-            }
-
-            // There should only be one
-            var previousLine = previousLines[0];
-            if (currentLine.currentType === "deletion") {
-                this.linesByOldLineNumber[currentLineNumber] =
-                    [Object.assign({}, currentLine, {
-                        originalLineNumber: previousLine.originalLineNumber,
-                        originalType: previousLine.originalType,
-                    })];
-            } else if (currentLine.currentType === "unchanged") {
-                if (!(currentLineNumber in this.linesByOldLineNumber)) {
-                    this.linesByOldLineNumber[currentLineNumber] =
-                    [Object.assign({}, currentLine, {
-                        originalLineNumber: 0,
-                    })];
-                }
+                this._addNewLine(currentLineNumber, currentLine);
             } else {
-                var lines = this.linesByOldLineNumber[currentLineNumber] =
-                    this.linesByOldLineNumber[currentLineNumber] || [];
-                lines.push(Object.assign({}, currentLine, {
-                    originalLineNumber: previousLine.originalLineNumber,
-                }));
+                // There should only be one
+                var previousLine = previousLines[0];
+                this._combineLine(currentLineNumber, previousLine, currentLine);
             }
         }
         this._createLinesFromLookupByOldLineNumber();
         this._setCompoundType();
         this._createLookupsFromLines();
+    }
+    _addNewLine (currentLineNumber, currentLine) {
+        this.linesByOldLineNumber[currentLineNumber] =
+            [Object.assign({}, currentLine, {
+                oldLineNumber: currentLineNumber,
+                newLineNumber: currentLineNumber,
+            })];
+    }
+    _combineLine (currentLineNumber, previousLine, currentLine) {
+        if (currentLine.currentType === "deletion") {
+            this._combineDeletion(currentLineNumber, previousLine, currentLine);
+        } else if (currentLine.currentType === "unchanged") {
+            this._combineUnchanged(currentLineNumber, previousLine, currentLine);
+        } else {
+            this._combineAddition(currentLineNumber, previousLine, currentLine);
+        }
+    }
+    _combineDeletion (currentLineNumber, previousLine, currentLine) {
+        this.linesByOldLineNumber[currentLineNumber] =
+            [Object.assign({}, currentLine, {
+                originalLineNumber: previousLine.originalLineNumber,
+                originalType: previousLine.originalType,
+            })];
+    }
+    _combineUnchanged (currentLineNumber, previousLine, currentLine) {
+        if (currentLineNumber in this.linesByOldLineNumber) {
+            return;
+        }
+
+        this.linesByOldLineNumber[currentLineNumber] =
+            [Object.assign({}, currentLine, {
+                originalLineNumber: 0,
+            })];
+    }
+    _combineAddition (currentLineNumber, previousLine, currentLine) {
+        var lines = this.linesByOldLineNumber[currentLineNumber] =
+            this.linesByOldLineNumber[currentLineNumber] || [];
+        lines.push(Object.assign({}, currentLine, {
+            originalLineNumber: previousLine.originalLineNumber,
+        }));
     }
 }
